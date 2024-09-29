@@ -1,6 +1,5 @@
 #!/bin/bash
 #
-# gamemode_profile.sh
 # [Steam]>[Game]>[Properties]>[General]>[Launch Options] 
 # LACTD_PROFILE=4 GAMEMODERUNEXEC="$HOME/bin/lactd_profile.sh" gamemoderun %command%
 
