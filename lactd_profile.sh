@@ -3,7 +3,6 @@
 # gamemode_profile.sh
 # [Steam]>[Game]>[Properties]>[General]>[Launch Options] 
 # LACTD_PROFILE=4 GAMEMODERUNEXEC="$HOME/bin/lactd_profile.sh" gamemoderun %command%
-# list_profiles, set_profile
 
 ID=$( echo '{"command": "list_devices" }' | ncat -U /run/lactd.sock | cut -d , -f 2 | cut -d \" -f 6 )
 echo $ID
@@ -17,23 +16,17 @@ confirm_pending_config() {
 }
 
 set_power_profile_mode() {
-    echo '{"command":"set_performance_level","args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","performance_level":"manual"}}' | ncat -U /run/lactd.sock
+    echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"manual"}}' | ncat -U /run/lactd.sock
     confirm_pending_config
         case "$1" in
             [0-5])
-                echo '{"command":"set_power_profile_mode","args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","index":'"$1"'}}' | ncat -U /run/lactd.sock
+                echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":'"$1"'}}' | ncat -U /run/lactd.sock
                 confirm_pending_config
                 ;;
             6)
                 echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":null,"custom_heuristics":[]}}' | ncat -U /run/lactd.sock
-                echo '{"command": "confirm_pending_config","args":{"command":"confirm"}}' | ncat -U /run/lactd.sock
-                echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":'"$1"',"custom_heuristics":[['"$GFXCLK"'],['"$SOCCLK"'],['"$MEMCLK"']]}}' | ncat -U /run/lactd.sock
-                echo '{"command": "confirm_pending_config","args":{"command":"confirm"}}' | ncat -U /run/lactd.sock
-                ;;
-            auto)
-                echo '{"command":"set_power_profile_mode", "args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","index":null}}' | ncat -U /run/lactd.sock
                 confirm_pending_config
-                echo '{"command":"set_performance_level","args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","performance_level":"auto"}}' | ncat -U /run/lactd.sock
+                echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":'"$1"',"custom_heuristics":[['"$GFXCLK"'],['"$SOCCLK"'],['"$MEMCLK"']]}}' | ncat -U /run/lactd.sock
                 confirm_pending_config
                 ;;
             *)
@@ -44,7 +37,7 @@ set_power_profile_mode() {
 
 set_performance_level() {
     echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":null,"custom_heuristics":[]}}' | ncat -U /run/lactd.sock
-    echo '{"command": "confirm_pending_config","args":{"command":"confirm"}}' | ncat -U /run/lactd.sock
+    confirm_pending_config
     case "$1" in
         auto | low | high)
             echo '{"command":"set_performance_level","args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","performance_level":"'"$1"'"}}' | ncat -U /run/lactd.sock
@@ -56,19 +49,20 @@ set_performance_level() {
         esac
 }
 
+set_lactd_profile() {
+    echo '{"command":"set_profile","args":{"name":"'"$LACTD_PROFILE"'"}}' | ncat -U /run/lactd.sock
+#    echo '{"command":"list_profiles"}' | ncat -U /run/lactd.sock
+}
+
 case "$LACTD_PROFILE" in
-    6)
-        set_power_profile_mode 6
-        echo $( sleep 20; gamemoded -r`pidof dota2` ) &
-        ;;
-    [0-5])
+    [0-6])
         set_power_profile_mode "$LACTD_PROFILE"
         ;;
     auto | low | high)
         set_performance_level "$LACTD_PROFILE"
         ;;
     *)
-        set_power_profile_mode 1 # 3D_FULL_SCREEN
+        set_lactd_profile "$LACTD_PROFILE"
         ;;
 esac
 
