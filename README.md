@@ -17,11 +17,12 @@ if required to return the power profile to BOOTUP_DEFAULT [0] or POWER_SAVING [2
 ```
 set_power_profile_mode auto
 ```
-    to
+
+to
 ```
 set_power_profile_mode 0
-```
-    or
-```
+
+or
+
 set_power_profile_mode 2
 ```
