@@ -12,17 +12,3 @@ LACTD_PROFILE=1 GAMEMODERUNEXEC="$HOME/bin/lactd_profile.sh" gamemoderun %comman
 end=$HOME/bin/gamemode_end.sh
 ```
 
-if required to return the power profile to BOOTUP_DEFAULT [0] or POWER_SAVING [2] once the game has finished edit the line in gamemode_end.sh from
-
-```
-set_power_profile_mode auto
-```
-
-to
-```
-set_power_profile_mode 0
-
-or
-
-set_power_profile_mode 2
-```
