@@ -40,7 +40,7 @@ set_performance_level() {
     confirm_pending_config
     case "$1" in
         auto | low | high)
-            echo '{"command":"set_performance_level","args":{"id":"1002:731F-1DA2:E409-0000:28:00.0","performance_level":"'"$1"'"}}' | ncat -U /run/lactd.sock
+            echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"'"$1"'"}}' | ncat -U /run/lactd.sock
             confirm_pending_config
             ;;
         *)
