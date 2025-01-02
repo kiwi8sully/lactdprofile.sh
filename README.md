@@ -6,6 +6,8 @@ A script to be called from the steam command line that changes power profiles on
 LACTD_PROFILE="3D Games" GAMEMODERUNEXEC="$HOME/bin/lactd_profile.sh" gamemoderun %command%
 ```
 where "3D Games" is the name of a lactd gui profile
+and
+"BootUp" is the name of the default profile used in the desktop
 
 /etc/gamemode.ini should be edited to point to gamemode_end.sh
 
