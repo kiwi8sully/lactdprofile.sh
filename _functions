@@ -1,0 +1,150 @@
+#!/bin/bash
+
+ID=$( echo '{"command": "list_devices" }' | ncat -U /run/lactd.sock | cut -d , -f 2 | cut -d \" -f 6 )
+
+_ping() {
+echo '{"command": "ping" }' | ncat -U /run/lactd.sock
+}
+
+_list_devices() {
+echo '{"command": "list_devices" }' | ncat -U /run/lactd.sock
+}
+
+_system_info() {
+echo '{"command": "system_info" }' | ncat -U /run/lactd.sock
+}
+
+_device_info() {
+echo '{"command":"device_info", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+_device_stats() {
+echo '{"command":"device_stats", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+_device_clocks_info() {
+echo '{"command":"device_clocks_info", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+_device_power_profile_modes() {
+echo '{"command":"device_power_profile_modes", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+#set_fan_control() {
+#
+#}
+#
+#reset_pmfw() {
+#
+#}
+#
+#
+#set_power_cap() {
+#
+#}
+
+set_performance_level() {
+    case "$1" in
+    auto | low | high)
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"manual"}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":null}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"'$1'"}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        ;;
+    *)
+        echo "You need to specify a performance level low | high auto"
+        ;;
+    esac
+}
+
+#set_clocks_value() {
+#
+#}
+#
+#batch_set_clocks_value() {
+#
+#}
+#
+
+set_power_profile_mode() {
+    case "$1" in
+    [0-6])
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"manual"}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":'$1'}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        ;;
+    auto)
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"manual"}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        echo '{"command":"set_power_profile_mode", "args":{"id":"'"$ID"'","index":null}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"auto"}}' | ncat -U /run/lactd.sock
+        confirm_pending_config
+        ;;
+    *)
+        echo "You need to specify a power profile [0-6] | auto"
+        ;;
+    esac
+}
+
+_get_power_states() {
+echo '{"command":"get_power_states", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+#set_enabled_power_states
+#vbios_dump
+#
+_list_profiles() {
+echo '{"command":"list_profiles", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
+}
+
+_set_profile() {
+echo '{"command":"set_profile","args":{"name":"'"$1"'","auto_switch":false}}' | ncat -U /run/lactd.sock
+}
+#
+#create_profile() {
+#
+#}
+#
+#delete_profile() {
+#
+#}
+#
+#move_profile() {
+#
+#}
+#
+#evaluate_profile_rule() {
+#
+#}
+#
+#set_profile_rule() {
+#
+#}
+#
+#enable_overdrive() {
+#
+#}
+#
+#disable_overdrive() {
+#
+#}
+#
+#generate_snapshot() {
+#
+#}
+confirm_pending_config() {
+    echo '{"command": "confirm_pending_config", "args": { "command": "confirm" } }' | ncat -U /run/lactd.sock
+}
+#set_performance_level auto
+#set_power_profile_mode auto
+#_device_power_profile_modes
+
+
+#_set_profile "BootUp"
+#_set_profile "3D Games"
+_list_profiles
+

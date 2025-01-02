@@ -3,7 +3,7 @@
 # [Steam]>[Game]>[Properties]>[General]>[Launch Options] 
 # LACTD_PROFILE="3D Games" GAMEMODERUNEXEC="$HOME/bin/lactd_profile.sh" gamemoderun %command%
 
-echo '{"command":"set_profile","args":{"name":"'"$LACTD_PROFILE"'"}}' | ncat -U /run/lactd.sock
+echo '{"command":"set_profile","args":{"name":"'"$LACTD_PROFILE"'","auto_switch":false}}' | ncat -U /run/lactd.sock
 
 ### BANG! ###
 GAMEMODERUNEXEC=""
