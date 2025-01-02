@@ -101,7 +101,7 @@ _list_profiles() {
 echo '{"command":"list_profiles", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
 }
 
-_set_profile() {
+set_profile() {
 echo '{"command":"set_profile","args":{"name":"'"$1"'","auto_switch":false}}' | ncat -U /run/lactd.sock
 }
 #
@@ -144,7 +144,7 @@ confirm_pending_config() {
 #_device_power_profile_modes
 
 
-#_set_profile "BootUp"
-#_set_profile "3D Games"
+#set_profile "BootUp"
+#set_profile "3D Games"
 _list_profiles
 
