@@ -39,9 +39,10 @@ echo '{"command":"device_power_profile_modes", "args":{"id":"'"$ID"'"}}' | ncat 
 #}
 #
 #
-#set_power_cap() {
-#
-#}
+set_power_cap() {
+echo '{"command":"set_power_cap","args":{"id":"'"$ID"'","cap":'"$1"'}}' | ncat -U /run/lactd.sock
+confirm_pending_config
+}
 
 set_performance_level() {
     case "$1" in
@@ -50,7 +51,7 @@ set_performance_level() {
         confirm_pending_config
         echo '{"command":"set_power_profile_mode","args":{"id":"'"$ID"'","index":null}}' | ncat -U /run/lactd.sock
         confirm_pending_config
-        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"'$1'"}}' | ncat -U /run/lactd.sock
+        echo '{"command":"set_performance_level","args":{"id":"'"$ID"'","performance_level":"'"$1"'"}}' | ncat -U /run/lactd.sock
         confirm_pending_config
         ;;
     *)
@@ -96,27 +97,40 @@ echo '{"command":"get_power_states", "args":{"id":"'"$ID"'"}}' | ncat -U /run/la
 
 #set_enabled_power_states
 #vbios_dump
-#
+
 _list_profiles() {
 echo '{"command":"list_profiles", "args":{"id":"'"$ID"'"}}' | ncat -U /run/lactd.sock
 }
 
+#_list_profiles_short() {
+#echo '{"command":"list_profiles","args":{"include_state":false}}' | ncat -U /run/lactd.sock
+#}
+
 set_profile() {
 echo '{"command":"set_profile","args":{"name":"'"$1"'","auto_switch":false}}' | ncat -U /run/lactd.sock
 }
-#
-#create_profile() {
-#
-#}
-#
-#delete_profile() {
-#
-#}
-#
-#move_profile() {
-#
-#}
-#
+
+set_profile_null() {
+echo '{"command":"set_profile","args":{"name":null,"auto_switch":false}}' | ncat -U /run/lactd.sock
+}
+
+create_profile() {
+echo '{"command":"create_profile","args":{"name":"'"$1"'","base":"default"}}' | ncat -U /run/lactd.sock
+}
+
+create_profile_empty() {
+echo '{"command":"create_profile","args":{"name":"'"$1"'","base":"empty"}}' | ncat -U /run/lactd.sock
+}
+
+delete_profile() {
+echo '{"command":"delete_profile","args":{"name":"'"$1"'"}}' | ncat -U /run/lactd.sock
+}
+
+move_profile() {
+# position in the profile list, numbering starts at 0 being the first position
+echo '{"command":"move_profile","args":{"name":"'"$1"'","new_position":'"$2"'}' | ncat -U /run/lactd.sock
+}
+
 #evaluate_profile_rule() {
 #
 #}
@@ -136,9 +150,11 @@ echo '{"command":"set_profile","args":{"name":"'"$1"'","auto_switch":false}}' | 
 #generate_snapshot() {
 #
 #}
+
 confirm_pending_config() {
-    echo '{"command": "confirm_pending_config", "args": { "command": "confirm" } }' | ncat -U /run/lactd.sock
+    echo '{"command":"confirm_pending_config","args":{"command":"confirm"}}' | ncat -U /run/lactd.sock
 }
+
 #set_performance_level auto
 #set_power_profile_mode auto
 #_device_power_profile_modes
