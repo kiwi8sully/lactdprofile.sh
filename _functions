@@ -22,7 +22,7 @@ fi
 
 while (( "$#" )); do
 case "$2" in
-    [0-9] | null | false)
+    [0-9] | null | false | true)
         CMD="$CMD"'"'"$1"'":'"$2"
     ;;
     *)
