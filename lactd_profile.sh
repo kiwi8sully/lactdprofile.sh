@@ -9,8 +9,8 @@ ID=$( echo '{"command":"list_devices"}' | ncat -U /run/lactd.sock | cut -d , -f 
 # $command $arg1 $val1 $arg2 $val2 $arg3 $val3
 # eg... 
 # lactd system_info
-# lactd get_power_states id $ID
-# lactd set_power_profile_mode id $ID index 0
+# lactd get_power_states id "$ID"
+# lactd set_power_profile_mode id "$ID" index 0
 # lactd confirm_pending_config command confirm
 # lactd set_profile name null auto_switch false
 
@@ -23,14 +23,14 @@ if [ $# -ne 0 ] ;then
 fi
 
 while (( "$#" )); do
-case "$2" in
-    [0-9] | null | false | true)
+    case "$2" in
+    null | false | true | [0-9] | *\,*)
         CMD="$CMD"'"'"$1"'":'"$2"
-    ;;
+        ;;
     *)
         CMD="$CMD"'"'"$1"'":"'"$2"'"'
-    ;;
-esac
+        ;;
+    esac
     shift 2
         if [ $# -ne 0 ] ;then
             CMD=$CMD','
@@ -38,8 +38,10 @@ esac
             CMD=$CMD'}'
         fi
 done
+
 CMD=$CMD'}'
-# echo "$CMD"
+#echo "$CMD"
+
 eval echo '"$CMD"' | ncat -U /run/lactd.sock
 }
 
