@@ -1,4 +1,4 @@
-A script to be called from the steam command line that changes power profiles on AMD graphics cards via the lactd api. ref: https://github.com/ilya-zlobintsev/LACT
+A script to be called from the steam command line that changes power profiles on AMD graphics cards via the lactd api. https://github.com/ilya-zlobintsev/LACT
 
 ## Requires.
 - https://github.com/ilya-zlobintsev/LACT
@@ -24,4 +24,4 @@ where "3D Games" is the name of a lact-gui profile.
 
 ### Command line.
 
-For command line usage or a headless setup you may find the comments and lactd function in lactd_profile.sh usefull or have a look at the wiki ref:https://github.com/kiwi8sully/lactdprofile.sh/wiki
+For command line usage or a headless setup you may find the comments and lactd function in lactd_profile.sh usefull or have a look at the wiki https://github.com/kiwi8sully/lactdprofile.sh/wiki
