@@ -7,7 +7,6 @@ ID=$( echo '{"command":"list_devices"}' | ncat -U /run/lactd.sock | cut -d , -f 
 # eg... 
 # lactd system_info
 # lactd get_power_states id $ID
-# lactd confirm_pending_config command confirm
 # lactd set_power_profile_mode id $ID index 0
 # lactd confirm_pending_config command confirm
 # lactd set_profile name null auto_switch false

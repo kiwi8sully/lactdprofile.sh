@@ -5,6 +5,15 @@
 
 ID=$( echo '{"command":"list_devices"}' | ncat -U /run/lactd.sock | cut -d , -f 2 | cut -d \" -f 6 )
 
+# lactd() This function should build out a $CMD to be evaluated and sent to the socket
+# $command $arg1 $val1 $arg2 $val2 $arg3 $val3
+# eg... 
+# lactd system_info
+# lactd get_power_states id $ID
+# lactd set_power_profile_mode id $ID index 0
+# lactd confirm_pending_config command confirm
+# lactd set_profile name null auto_switch false
+
 lactd(){
 CMD='{"command":"'"$1"'"'
 shift
@@ -35,7 +44,6 @@ eval echo '"$CMD"' | ncat -U /run/lactd.sock
 }
 
 lactd set_profile name "$LACTD_PROFILE" auto_switch false
-lactd confirm_pending_config command confirm
 
 ### BANG! ###
 GAMEMODERUNEXEC=""
