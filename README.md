@@ -1,10 +1,11 @@
 A script to be called from the steam command line that changes power profiles on AMD graphics cards via the lactd api. ref: https://github.com/ilya-zlobintsev/LACT
 
-* Requires *
+## Requires
 https://github.com/ilya-zlobintsev/LACT
 ncat
 
-*** Install ***
+### Install 
+
 1. Copy Lactd_profile.sh and gamemode_end.sh to your /home/$USER/bin/ folder.
 
 2. Edit /etc/gamemode.ini to point to gamemode_end.sh
