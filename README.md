@@ -25,3 +25,5 @@ where "3D Games" is the name of a lact-gui profile.
 ### Command line.
 
 For command line usage or a headless setup you may find the comments and lactd function in lactd_profile.sh usefull :)
+
+or have a look at the wiki ref:https://github.com/kiwi8sully/lactdprofile.sh/wiki
